@@ -1,0 +1,29 @@
+version: "3.9"
+
+## define network name
+networks:
+  image-manipulator:
+
+# create services under network
+services:
+  nginx:
+    container_name: image-manipulator_nginx
+    networks:
+      - image-manipulator
+    image: ubuntu/nginx:1.18-20.04_beta
+    ports:
+      - "8088:80"
+    volumes:
+      - ./app:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+  php:
+    container_name: image-manipulator_php
+    networks:
+      - image-manipulator
+    image: php:8.1-fpm
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./app:/var/www/html
